@@ -78,12 +78,33 @@ resource "aws_iam_role_policy" "tf_role_policy" {
         Sid = "AllowS3BucketMetadata"
         Action = [
           "s3:ListBucket",
-          "s3:GetBucketPolicy",
-          "s3:GetBucketVersioning",
           "s3:GetBucketAcl",
           "s3:GetBucketCORS",
+          "s3:GetBucketVersioning",
+          "s3:GetBucketLocation",
+          "s3:GetBucketTagging",
+          "s3:GetBucketLogging",
+          "s3:GetBucketPolicy",
+          "s3:GetBucketPolicyStatus",
           "s3:GetBucketWebsite",
-          "s3:GetAccelerateConfiguration"
+          "s3:GetBucketRequestPayment",
+          "s3:GetBucketPublicAccessBlock",
+          "s3:GetAccelerateConfiguration",
+          "s3:GetEncryptionConfiguration",
+          "s3:GetBucketReplication",
+          "s3:PutBucketAcl",
+          "s3:PutBucketCORS",
+          "s3:PutBucketVersioning",
+          "s3:PutBucketLogging",
+          "s3:PutBucketPolicy",
+          "s3:PutBucketTagging",
+          "s3:PutBucketWebsite",
+          "s3:PutBucketRequestPayment",
+          "s3:PutBucketPublicAccessBlock",
+          "s3:PutEncryptionConfiguration",
+          "s3:PutBucketReplication",
+          "s3:DeleteBucketPolicy",
+          "s3:DeleteBucketWebsite"
         ]
         Effect   = "Allow"
         Resource = "arn:aws:s3:::projeto-iac-state"

@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     aws = {
-      source = "hashicorp/aws"
+      source  = "hashicorp/aws"
       version = "5.94.1"
     }
   }
@@ -11,15 +11,15 @@ terraform {
     key    = "state/terraform.tfstate"
     region = "eu-central-1"
   }
-  
+
 }
 
 provider "aws" {
-    region = "eu-central-1"
+  region = "eu-central-1"
 }
 
 resource "aws_s3_bucket" "terraform-state" {
-  bucket = "projeto-iac-state"
+  bucket        = "projeto-iac-state"
   force_destroy = true
 
   lifecycle {

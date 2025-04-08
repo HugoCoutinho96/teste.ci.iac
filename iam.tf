@@ -1,42 +1,42 @@
 resource "aws_iam_openid_connect_provider" "oidc_git" {
-    url = "https://token.actions.githubusercontent.com"
+  url = "https://token.actions.githubusercontent.com"
 
-    client_id_list = [
-        "sts.amazonaws.com",
-    ]
+  client_id_list = [
+    "sts.amazonaws.com",
+  ]
 
-    thumbprint_list = [
-        "74f3a68f16524f15424927704c9506f55a9316bd"
-    ]
+  thumbprint_list = [
+    "74f3a68f16524f15424927704c9506f55a9316bd"
+  ]
 
-    tags = {
-        Iac = true
-    }
+  tags = {
+    Iac = true
+  }
 }
 
 resource "aws_iam_role" "tf_role" {
   name = "tf-role"
 
   assume_role_policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": "sts:AssumeRoleWithWebIdentity",
-            "Principal": {
-                "Federated": "arn:aws:iam::484109133616:oidc-provider/token.actions.githubusercontent.com"
-            },
-            "Condition": {
-                "StringEquals": {
-                    "token.actions.githubusercontent.com:aud": [
-                        "sts.amazonaws.com"
-                    ],
-                    "token.actions.githubusercontent.com:sub": [
-                        "repo:HugoCoutinho96/teste.ci.iac:ref:refs/heads/main"
-                    ]
-                }
-            }
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : "sts:AssumeRoleWithWebIdentity",
+        "Principal" : {
+          "Federated" : "arn:aws:iam::484109133616:oidc-provider/token.actions.githubusercontent.com"
+        },
+        "Condition" : {
+          "StringEquals" : {
+            "token.actions.githubusercontent.com:aud" : [
+              "sts.amazonaws.com"
+            ],
+            "token.actions.githubusercontent.com:sub" : [
+              "repo:HugoCoutinho96/teste.ci.iac:ref:refs/heads/main"
+            ]
+          }
         }
+      }
     ]
   })
 
@@ -53,19 +53,19 @@ resource "aws_iam_role_policy" "tf_role_policy" {
     Version = "2012-10-17",
     Statement = [
       {
-        Sid    = "AllowECR"
-        Action = "ecr:*"
-        Effect = "Allow"
+        Sid      = "AllowECR"
+        Action   = "ecr:*"
+        Effect   = "Allow"
         Resource = "*"
       },
       {
-        Sid    = "AllowIAM"
-        Action = "iam:*"
-        Effect = "Allow"
+        Sid      = "AllowIAM"
+        Action   = "iam:*"
+        Effect   = "Allow"
         Resource = "*"
       },
       {
-        Sid    = "AllowS3AccessToTerraformBackend"
+        Sid = "AllowS3AccessToTerraformBackend"
         Action = [
           "s3:GetObject",
           "s3:PutObject",
@@ -86,21 +86,21 @@ resource "aws_iam_role" "app-runner-role" {
   name = "app-runner-role"
 
   assume_role_policy = jsonencode({
-    Version: "2012-10-17",
-    Statement: [
+    Version : "2012-10-17",
+    Statement : [
       {
-        Sid: "Statement1",
-        Effect: "Allow",
-        Principal: {
-          Service: "build.apprunner.amazonaws.com"
+        Sid : "Statement1",
+        Effect : "Allow",
+        Principal : {
+          Service : "build.apprunner.amazonaws.com"
         },
-        Action: "sts:AssumeRole"
+        Action : "sts:AssumeRole"
       }
     ]
   })
 
   tags = {
-        Iac = true
+    Iac = true
   }
 }
 
@@ -113,25 +113,25 @@ resource "aws_iam_role" "ecr-role" {
   name = "ecr-role"
 
   assume_role_policy = jsonencode({
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": "sts:AssumeRoleWithWebIdentity",
-            "Principal": {
-                "Federated": "arn:aws:iam::484109133616:oidc-provider/token.actions.githubusercontent.com"
-            },
-            "Condition": {
-                "StringEquals": {
-                    "token.actions.githubusercontent.com:aud": [
-                        "sts.amazonaws.com"
-                    ],
-                    "token.actions.githubusercontent.com:sub": [
-                        "repo:HugoCoutinho96/teste.ci.api:ref:refs/heads/main"
-                    ]
-                }
-            }
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : "sts:AssumeRoleWithWebIdentity",
+        "Principal" : {
+          "Federated" : "arn:aws:iam::484109133616:oidc-provider/token.actions.githubusercontent.com"
+        },
+        "Condition" : {
+          "StringEquals" : {
+            "token.actions.githubusercontent.com:aud" : [
+              "sts.amazonaws.com"
+            ],
+            "token.actions.githubusercontent.com:sub" : [
+              "repo:HugoCoutinho96/teste.ci.api:ref:refs/heads/main"
+            ]
+          }
         }
+      }
     ]
   })
 }
@@ -140,38 +140,38 @@ resource "aws_iam_role_policy" "ecr-upload" {
   name = "ecr-upload-policy"
   role = aws_iam_role.ecr-role.name
   policy = jsonencode({
-      Version = "2012-10-17"
-      Statement = [
-        {
-          Sid      = "Statement1"
-          Action   = "apprunner:*"
-          Effect   = "Allow"
-          Resource = "*"
-        },
-        {
-          Sid      = "Statement2"
-          Action   = [
-            "iam:PassRole",
-            "iam:CreateServiceLinkedRole"
-          ]
-          Effect   = "Allow"
-          Resource = "*"
-        },
-        {
-          Sid      = "Statement3"
-          Action   = [
-            "ecr:GetDownloadUrlForLayer",
-            "ecr:BatchGetImage",
-            "ecr:BatchCheckLayerAvailability",
-            "ecr:UploadLayerPart",
-            "ecr:PutImage",
-            "ecr:InitiateLayerUpload",
-            "ecr:CompleteLayerUpload",
-            "ecr:GetAuthorizationToken",
-          ]
-          Effect   = "Allow"
-          Resource = "*"
-        },
-      ]
-    })
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid      = "Statement1"
+        Action   = "apprunner:*"
+        Effect   = "Allow"
+        Resource = "*"
+      },
+      {
+        Sid = "Statement2"
+        Action = [
+          "iam:PassRole",
+          "iam:CreateServiceLinkedRole"
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      },
+      {
+        Sid = "Statement3"
+        Action = [
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:BatchGetImage",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:UploadLayerPart",
+          "ecr:PutImage",
+          "ecr:InitiateLayerUpload",
+          "ecr:CompleteLayerUpload",
+          "ecr:GetAuthorizationToken",
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      },
+    ]
+  })
 }

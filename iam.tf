@@ -82,7 +82,8 @@ resource "aws_iam_role_policy" "tf_role_policy" {
           "s3:GetBucketVersioning",
           "s3:GetBucketAcl",
           "s3:GetBucketCORS",
-          "s3:GetBucketWebsite"
+          "s3:GetBucketWebsite",
+          "s3:GetAccelerateConfiguration"
         ]
         Effect   = "Allow"
         Resource = "arn:aws:s3:::projeto-iac-state"

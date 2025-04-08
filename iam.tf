@@ -53,16 +53,30 @@ resource "aws_iam_role_policy" "tf_role_policy" {
     Version = "2012-10-17",
     Statement = [
       {
-        Sid      = "Statement1"
-        Action   = "ecr:*"
-        Effect   = "Allow"
+        Sid    = "AllowECR"
+        Action = "ecr:*"
+        Effect = "Allow"
         Resource = "*"
       },
       {
-        Sid      = "Statement2"
-        Action   = "iam:*"
-        Effect   = "Allow"
+        Sid    = "AllowIAM"
+        Action = "iam:*"
+        Effect = "Allow"
         Resource = "*"
+      },
+      {
+        Sid    = "AllowS3AccessToTerraformBackend"
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject",
+          "s3:ListBucket"
+        ]
+        Effect = "Allow"
+        Resource = [
+          "arn:aws:s3:::projeto-iac-state",
+          "arn:aws:s3:::projeto-iac-state/state/*"
+        ]
       }
     ]
   })

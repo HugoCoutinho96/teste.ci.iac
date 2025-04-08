@@ -45,6 +45,29 @@ resource "aws_iam_role" "tf_role" {
   }
 }
 
+resource "aws_iam_role_policy" "tf_role_policy" {
+  name = "tf-role-policy"
+  role = aws_iam_role.tf_role.name
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Sid      = "Statement1"
+        Action   = "ecr:*"
+        Effect   = "Allow"
+        Resource = "*"
+      },
+      {
+        Sid      = "Statement2"
+        Action   = "iam:*"
+        Effect   = "Allow"
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 resource "aws_iam_role" "app-runner-role" {
   name = "app-runner-role"
 

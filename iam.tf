@@ -92,6 +92,7 @@ resource "aws_iam_role_policy" "tf_role_policy" {
           "s3:GetAccelerateConfiguration",
           "s3:GetEncryptionConfiguration",
           "s3:GetBucketReplication",
+          "s3:GetLifecycleConfiguration",
           "s3:PutBucketAcl",
           "s3:PutBucketCORS",
           "s3:PutBucketVersioning",
@@ -103,8 +104,10 @@ resource "aws_iam_role_policy" "tf_role_policy" {
           "s3:PutBucketPublicAccessBlock",
           "s3:PutEncryptionConfiguration",
           "s3:PutBucketReplication",
+          "s3:PutLifecycleConfiguration",
           "s3:DeleteBucketPolicy",
-          "s3:DeleteBucketWebsite"
+          "s3:DeleteBucketWebsite",
+          "s3:DeleteLifecycleConfiguration"
         ]
         Effect   = "Allow"
         Resource = "arn:aws:s3:::projeto-iac-state"

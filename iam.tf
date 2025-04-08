@@ -71,8 +71,8 @@ resource "aws_iam_role_policy" "tf_role_policy" {
           "s3:PutObject",
           "s3:DeleteObject",
           "s3:ListBucket",
-          "s3:GetBucketPolicy",        
-          "s3:GetBucketVersioning"   
+          "s3:GetBucketPolicy",
+          "s3:GetBucketVersioning"
         ]
         Effect = "Allow"
         Resource = [

@@ -65,20 +65,24 @@ resource "aws_iam_role_policy" "tf_role_policy" {
         Resource = "*"
       },
       {
-        Sid = "AllowS3AccessToTerraformBackend"
+        Sid = "AllowS3AccessToObjects"
         Action = [
           "s3:GetObject",
           "s3:PutObject",
-          "s3:DeleteObject",
+          "s3:DeleteObject"
+        ]
+        Effect   = "Allow"
+        Resource = "arn:aws:s3:::projeto-iac-state/state/*"
+      },
+      {
+        Sid = "AllowS3BucketMetadata"
+        Action = [
           "s3:ListBucket",
           "s3:GetBucketPolicy",
           "s3:GetBucketVersioning"
         ]
-        Effect = "Allow"
-        Resource = [
-          "arn:aws:s3:::projeto-iac-state",
-          "arn:aws:s3:::projeto-iac-state/state/*"
-        ]
+        Effect   = "Allow"
+        Resource = "arn:aws:s3:::projeto-iac-state"
       }
     ]
   })

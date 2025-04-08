@@ -94,6 +94,7 @@ resource "aws_iam_role_policy" "tf_role_policy" {
           "s3:GetBucketReplication",
           "s3:GetLifecycleConfiguration",
           "s3:GetReplicationConfiguration",
+          "s3:GetBucketObjectLockConfiguration", // 🆕 aqui
           "s3:PutBucketAcl",
           "s3:PutBucketCORS",
           "s3:PutBucketVersioning",
